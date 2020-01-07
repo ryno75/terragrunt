@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/gruntwork-io/terragrunt/config"
@@ -109,6 +110,12 @@ func parseTerragruntOptionsFromArgs(args []string, writer, errWriter io.Writer) 
 		return nil, err
 	}
 
+	envValue, envProvided := os.LookupEnv("TERRAGRUNT_PARALLELISM")
+	parallelism, err := parseIntArg(args, OPT_TERRAGRUNT_PARALLELISM, envValue, envProvided, options.DEFAULT_PARALLELISM)
+	if err != nil {
+		return nil, err
+	}
+
 	opts.TerraformPath = filepath.ToSlash(terraformPath)
 	opts.AutoInit = !parseBooleanArg(args, OPT_TERRAGRUNT_NO_AUTO_INIT, os.Getenv("TERRAGRUNT_AUTO_INIT") == "false")
 	opts.AutoRetry = !parseBooleanArg(args, OPT_TERRAGRUNT_NO_AUTO_RETRY, os.Getenv("TERRAGRUNT_AUTO_RETRY") == "false")
@@ -131,6 +138,7 @@ func parseTerragruntOptionsFromArgs(args []string, writer, errWriter io.Writer) 
 	opts.IamRole = iamRole
 	opts.ExcludeDirs = excludeDirs
 	opts.IncludeDirs = includeDirs
+	opts.Parallelism = parallelism
 	opts.Check = parseBooleanArg(args, OPT_TERRAGRUNT_CHECK, os.Getenv("TERRAGRUNT_CHECK") == "false")
 
 	return opts, nil
@@ -260,6 +268,25 @@ func parseBooleanArg(args []string, argName string, defaultValue bool) bool {
 		}
 	}
 	return defaultValue
+}
+
+// Find a int argument (e.g. --foo 1) of the given name in the given list of arguments. If it's present,
+// return its value. If it is present, but has no value, return an error. If it isn't present, return envValue if provided. If not provided, return defaultValue.
+func parseIntArg(args []string, argName string, envValue string, envProvided bool, defaultValue int) (int, error) {
+	for i, arg := range args {
+		if arg == fmt.Sprintf("--%s", argName) {
+			if (i + 1) < len(args) {
+				return strconv.Atoi(args[i+1])
+			} else {
+				return 0, errors.WithStackTrace(ArgMissingValue(argName))
+			}
+		}
+	}
+	if envProvided {
+		return strconv.Atoi(envValue)
+	} else {
+		return defaultValue, nil
+	}
 }
 
 // Find a string argument (e.g. --foo "VALUE") of the given name in the given list of arguments. If it's present,

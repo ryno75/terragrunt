@@ -40,9 +40,9 @@ func (stack *Stack) Plan(terragruntOptions *options.TerragruntOptions) error {
 	}
 	defer stack.summarizePlanAllErrors(terragruntOptions, errorStreams)
 	if terragruntOptions.IgnoreDependencyOrder {
-		return RunModulesIgnoreOrder(stack.Modules)
+		return RunModulesIgnoreOrder(stack.Modules, terragruntOptions.Parallelism)
 	} else {
-		return RunModules(stack.Modules)
+		return RunModules(stack.Modules, terragruntOptions.Parallelism)
 	}
 }
 
@@ -76,9 +76,9 @@ func (stack *Stack) summarizePlanAllErrors(terragruntOptions *options.Terragrunt
 func (stack *Stack) Apply(terragruntOptions *options.TerragruntOptions) error {
 	stack.setTerraformCommand([]string{"apply", "-input=false", "-auto-approve"})
 	if terragruntOptions.IgnoreDependencyOrder {
-		return RunModulesIgnoreOrder(stack.Modules)
+		return RunModulesIgnoreOrder(stack.Modules, terragruntOptions.Parallelism)
 	} else {
-		return RunModules(stack.Modules)
+		return RunModules(stack.Modules, terragruntOptions.Parallelism)
 	}
 }
 
@@ -87,9 +87,9 @@ func (stack *Stack) Apply(terragruntOptions *options.TerragruntOptions) error {
 func (stack *Stack) Destroy(terragruntOptions *options.TerragruntOptions) error {
 	stack.setTerraformCommand([]string{"destroy", "-force", "-input=false"})
 	if terragruntOptions.IgnoreDependencyOrder {
-		return RunModulesIgnoreOrder(stack.Modules)
+		return RunModulesIgnoreOrder(stack.Modules, terragruntOptions.Parallelism)
 	} else {
-		return RunModulesReverseOrder(stack.Modules)
+		return RunModulesReverseOrder(stack.Modules, terragruntOptions.Parallelism)
 	}
 }
 
@@ -97,9 +97,9 @@ func (stack *Stack) Destroy(terragruntOptions *options.TerragruntOptions) error 
 func (stack *Stack) Output(terragruntOptions *options.TerragruntOptions) error {
 	stack.setTerraformCommand([]string{"output"})
 	if terragruntOptions.IgnoreDependencyOrder {
-		return RunModulesIgnoreOrder(stack.Modules)
+		return RunModulesIgnoreOrder(stack.Modules, terragruntOptions.Parallelism)
 	} else {
-		return RunModules(stack.Modules)
+		return RunModules(stack.Modules, terragruntOptions.Parallelism)
 	}
 }
 
@@ -107,9 +107,9 @@ func (stack *Stack) Output(terragruntOptions *options.TerragruntOptions) error {
 func (stack *Stack) Validate(terragruntOptions *options.TerragruntOptions) error {
 	stack.setTerraformCommand([]string{"validate"})
 	if terragruntOptions.IgnoreDependencyOrder {
-		return RunModulesIgnoreOrder(stack.Modules)
+		return RunModulesIgnoreOrder(stack.Modules, terragruntOptions.Parallelism)
 	} else {
-		return RunModules(stack.Modules)
+		return RunModules(stack.Modules, terragruntOptions.Parallelism)
 	}
 }
 
