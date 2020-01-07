@@ -24,6 +24,8 @@ const DEFAULT_MAX_FOLDERS_TO_CHECK = 100
 // TERRAFORM_DEFAULT_PATH just takes terraform from the path
 const TERRAFORM_DEFAULT_PATH = "terraform"
 
+const DEFAULT_PARALLELISM = 10
+
 const TerragruntCacheDir = ".terragrunt-cache"
 
 // TerragruntOptions represents options that configure the behavior of the Terragrunt program
@@ -114,6 +116,9 @@ type TerragruntOptions struct {
 	// Enable check mode, by default it's disabled.
 	Check bool
 
+	// Parallelism limits the number of commands to run concurrently during *-all commands
+	Parallelism int
+
 	// A command that can be used to run Terragrunt with the given options. This is useful for running Terragrunt
 	// multiple times (e.g. when spinning up a stack of Terraform modules). The actual command is normally defined
 	// in the cli package, which depends on almost all other packages, so we declare it here so that other
@@ -158,6 +163,7 @@ func NewTerragruntOptions(terragruntConfigPath string) (*TerragruntOptions, erro
 		ExcludeDirs:                 []string{},
 		IncludeDirs:                 []string{},
 		Check:                       false,
+		Parallelism:                 DEFAULT_PARALLELISM,
 		RunTerragrunt: func(terragruntOptions *TerragruntOptions) error {
 			return errors.WithStackTrace(RunTerragruntCommandNotSet)
 		},
@@ -227,6 +233,7 @@ func (terragruntOptions *TerragruntOptions) Clone(terragruntConfigPath string) *
 		RetryableErrors:             util.CloneStringList(terragruntOptions.RetryableErrors),
 		ExcludeDirs:                 terragruntOptions.ExcludeDirs,
 		IncludeDirs:                 terragruntOptions.IncludeDirs,
+		Parallelism:                 terragruntOptions.Parallelism,
 		RunTerragrunt:               terragruntOptions.RunTerragrunt,
 	}
 }
