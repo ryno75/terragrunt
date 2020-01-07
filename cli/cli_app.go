@@ -40,6 +40,7 @@ const OPT_TERRAGRUNT_EXCLUDE_DIR = "terragrunt-exclude-dir"
 const OPT_TERRAGRUNT_INCLUDE_DIR = "terragrunt-include-dir"
 const OPT_TERRAGRUNT_STRICT_INCLUDE = "terragrunt-strict-include"
 const OPT_TERRAGRUNT_CHECK = "terragrunt-check"
+const OPT_TERRAGRUNT_PARALLELISM = "terragrunt-parallelism"
 
 var ALL_TERRAGRUNT_BOOLEAN_OPTS = []string{
 	OPT_NON_INTERACTIVE,
