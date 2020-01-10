@@ -118,13 +118,13 @@ func parseTerragruntOptionsFromArgs(args []string, writer, errWriter io.Writer) 
 		return nil, err
 	}
 
-	opts, err := options.NewTerragruntOptions(filepath.ToSlash(terragruntConfigPath))
+	envValue, envProvided := os.LookupEnv("TERRAGRUNT_PARALLELISM")
+	parallelism, err := parseIntArg(args, OPT_TERRAGRUNT_PARALLELISM, envValue, envProvided, options.DEFAULT_PARALLELISM)
 	if err != nil {
 		return nil, err
 	}
 
-	envValue, envProvided := os.LookupEnv("TERRAGRUNT_PARALLELISM")
-	parallelism, err := parseIntArg(args, OPT_TERRAGRUNT_PARALLELISM, envValue, envProvided, options.DEFAULT_PARALLELISM)
+	opts, err := options.NewTerragruntOptions(filepath.ToSlash(terragruntConfigPath))
 	if err != nil {
 		return nil, err
 	}
