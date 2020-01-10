@@ -158,14 +158,15 @@ GLOBAL OPTIONS:
    terragrunt-download-dir                      The path where to download Terraform code. Default is .terragrunt-cache in the working directory.
    terragrunt-source                            Download Terraform configurations from the specified source into a temporary folder, and run Terraform in that temporary folder.
    terragrunt-source-update                     Delete the contents of the temporary folder to clear out any old, cached source code before downloading new source code into it.
-   terragrunt-iam-role             	    	    Assume the specified IAM role before executing Terraform. Can also be set via the TERRAGRUNT_IAM_ROLE environment variable.
+   terragrunt-iam-role                          Assume the specified IAM role before executing Terraform. Can also be set via the TERRAGRUNT_IAM_ROLE environment variable.
    terragrunt-ignore-dependency-errors          *-all commands continue processing components even if a dependency fails.
-   terragrunt-ignore-dependency-order           *-all commands will be run disregarding the dependencies
-   terragrunt-ignore-external-dependencies      *-all commands will not attempt to include external dependencies
-   terragrunt-include-external-dependencies     *-all commands will include external dependencies
-   terragrunt-exclude-dir                       Unix-style glob of directories to exclude when running *-all commands
-   terragrunt-include-dir                       Unix-style glob of directories to include when running *-all commands
+   terragrunt-ignore-dependency-order           *-all commands will be run disregarding the dependencies.
+   terragrunt-ignore-external-dependencies      *-all commands will not attempt to include external dependencies.
+   terragrunt-include-external-dependencies     *-all commands will include external dependencies.
+   terragrunt-exclude-dir                       Unix-style glob of directories to exclude when running *-all commands.
+   terragrunt-include-dir                       Unix-style glob of directories to include when running *-all commands.
    terragrunt-check                             Enable check mode in the hclfmt command.
+   terragrunt-parallelism                       Number of threads to run in parallel during execution.
 
 VERSION:
    {{.Version}}{{if len .Authors}}
