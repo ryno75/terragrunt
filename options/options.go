@@ -1,4 +1,4 @@
-zRckage options
+package options
 
 import (
 	"fmt"
